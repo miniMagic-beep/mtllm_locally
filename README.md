@@ -16,4 +16,4 @@ A custom MTLLM plugin and local server to integrate a specialized TinyLlama mode
 ## Next Steps -
 
 * **Fine-Tune Model**: Create a domain-specific dataset to fine-tune TinyLlama, specializing it for Jaclang's unique structured data tasks.
-* **Integrate Final Model**: Replace the b
+* **Integrate Final Model**: Replace the base TinyLlama in the local proxy with the newly fine-tuned version to complete the integration.
