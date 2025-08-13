@@ -18,4 +18,3 @@ A custom MTLLM plugin and local server to integrate a specialized and self-impro
 1.  **🧠 Dynamic Fine-Tuning**: Enhance the plugin to dynamically trigger fine-tuning jobs on the **TinyLlama** model using collected data, creating specialized versions automatically.
 2.  **🔄 Automated Model Integration**: Implement logic for the plugin to seamlessly switch to the newly fine-tuned model versions without manual intervention.
 3.  **🧪 End-to-End Testing**: Conduct thorough testing of the complete workflow, including the dynamic training and model-swapping loop.
-4.  **🔀 Implement Dynamic Routing**: Enable the plugin to automatically route API requests externally to other LLMs when necessary.
