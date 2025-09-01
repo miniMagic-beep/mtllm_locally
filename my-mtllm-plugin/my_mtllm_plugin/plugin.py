@@ -12,6 +12,7 @@ import litellm
 #litellm.set_verbose = True
 #litellm.turn_on_debug_logs()
 import os
+import requests
 
 
 class MyMtllmMachine:
@@ -38,15 +39,29 @@ class MyMtllmMachine:
         
         # Get the return JSON from the MTIR object and print it
         mtir_json = mtir_object.get_output_schema()
-        print(f"MTIR return JSON: {mtir_json}")
-        print("DONE!!!!!")
+        # print(f"MTIR return JSON: {mtir_json}")
+        # print("DONE!!!!!")
 
-    
-
-        # Option 1: Modify the call and delegate to the original model
+        which_model = requests.get("https://5wwzgp9vqbnlz3-7000.proxy.runpod.net/which")
+        print(f"GET /which response: {which_model.text}")
+    # Option 1: Modify the call and delegate to the original model
+        # result_in_json = {"name": "Mihiran", "age": "24"}
+        # result_in_text = "Name: Mihiran, Age: 24"
+        # result = mtir_object.parse_response(result_in_text)
         result = model.invoke(mtir_object)
+        # print(f"Result: {result}")
+        # print(f"Type of result: {type(result)}")
+
+        llm2 = Model(
+            model_name="gpt-4o",            # can be any string, required for LiteLLM
+            api_key="not-needed",           # dummy, local endpoint doesn’t check
+            proxy_url="https://5wwzgp9vqbnlz3-7000.proxy.runpod.net"
+        )
+        print("Running Thenu")
+        result = llm2.invoke(mtir_object)
         print(f"Result: {result}")
         print(f"Type of result: {type(result)}")
+
         
         
         #Mihiran wrote this
@@ -61,6 +76,8 @@ class MyMtllmMachine:
         #     ],
         #     temperature=0.7
         # )
+        #TEST TEST
+        
         
 
         
