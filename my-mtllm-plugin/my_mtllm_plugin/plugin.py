@@ -14,6 +14,12 @@ import litellm
 import os
 import requests
 
+from litellm.types.utils import Message as LiteLLMMessage
+
+from my_mtllm_plugin.utilities import evaluate_local_model
+
+
+
 
 class MyMtllmMachine:
     """Custom MTLLM Plugin Implementation."""
@@ -24,12 +30,7 @@ class MyMtllmMachine:
         model: Model, caller: Callable, args: dict[str | int, object]
     ) -> object:
         """Custom LLM call implementation."""
-        # Custom logic implementation
-        # print(f"model name: {model}, caller: {caller}, args: {args}")
-        # print(f"Custom plugin intercepted call to: {caller.__name__}")
-        # print(f"Arguments: {args}")
-
-        
+    
         # Create the MTIR object using the factory method
         mtir_object = MTIR.factory(
         caller=caller,
@@ -50,15 +51,29 @@ class MyMtllmMachine:
         except Exception as e:
             print(f"Error parsing /which response: {e}")
             is_local = False
+            #ERROR HERE
+            is_local = True
+        
         if not is_local:
             print("Model is Global ")
-            final_result = model.invoke(mtir_object)
+            #final_result = model.invoke(mtir_object)
+        #Model Eval has started
+        # if (false):
+        #     mtir_local = MTIR.factory(
+        #                 caller=caller,
+        #                 args=args,
+        #                 call_params={} 
+        #             )
+
+
+
+
 
 
         llm2 = Model(
             model_name="gpt-4o",            # can be any string, required for LiteLLM
             api_key="not-needed",           # dummy, local endpoint doesn’t check
-            proxy_url="https://5wwzgp9vqbnlz3-7000.proxy.runpod.net"
+            proxy_url="https://gqibcizt771w61-7000.proxy.runpod.net"
         )
         print("Running Thenu")
         result = llm2.invoke(mtir_object)
@@ -71,6 +86,8 @@ class MyMtllmMachine:
         print(f"Result from model.invoke: {result}")
         # print(f"Message content from litellm: {message_content}")
         #print(f"Result: {result}")
+        print("Here We GO!!!!!")
+        evaluate_local_model(model, mtir_object)
         return final_result
 
 
