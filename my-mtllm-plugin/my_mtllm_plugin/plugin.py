@@ -18,7 +18,7 @@ from litellm.types.utils import Message as LiteLLMMessage
 
 from my_mtllm_plugin.utilities import evaluate_local_model
 
-
+BASE_URL = "https://gqibcizt771w61-7000.proxy.runpod.net"
 
 
 class MyMtllmMachine:
@@ -37,57 +37,52 @@ class MyMtllmMachine:
         args=args,
         call_params={} 
     )
-        
+        local_llm = Model(
+            model_name="gpt-4o",            # can be any string, required for LiteLLM
+            api_key="not-needed",           # dummy, local endpoint doesn’t check
+            proxy_url=BASE_URL
+        )
         # Get the return JSON from the MTIR object and print it
         #
         # print(f"MTIR return JSON: {mtir_json}")
         # print("DONE!!!!!")
 
-        which_model = requests.get("https://5wwzgp9vqbnlz3-7000.proxy.runpod.net/which")
-        print(f"GET /which response: {which_model.text}")
+        which_model_res = requests.get(BASE_URL+"/which")
+        print(f"GET /which response: {which_model_res.text}")
         # Parse the JSON response and check if is_local is True (as a string)
-        try:
-            is_local = which_model.json().get("is_local", "False") == "True"
-        except Exception as e:
-            print(f"Error parsing /which response: {e}")
-            is_local = False
-            #ERROR HERE
-            is_local = True
-        
-        if not is_local:
+     
+        mode = which_model_res.json().get("mode", "global")
+           
+        if mode == "global":
             print("Model is Global ")
-            #final_result = model.invoke(mtir_object)
-        #Model Eval has started
-        # if (false):
-        #     mtir_local = MTIR.factory(
-        #                 caller=caller,
-        #                 args=args,
-        #                 call_params={} 
-        #             )
+            final_result = model.invoke(mtir_object)
+            #This collects train data if mode is global
+            local_llm.invoke(mtir_object)
+
+        if mode == "local":
+            final_result = local_llm.invoke(mtir_object)
+        #Eval Mode
+        elif (mode =="eval"):
+            print("Model is in Eval ")
+            #For Local Usage
+            mtir_temp = MTIR.factory(
+                caller=caller,
+                args=args,
+                call_params={}
+            )
+            result = local_llm.invoke(mtir_temp)
+            verdict = evaluate_local_model(model, mtir_temp)
+            if verdict:
+                print("Local Model Correct")
+                final_result = result
+            else:
+                print(f"Local Model Answer: {result}")
+                final_result = model.invoke(mtir_object)
 
 
 
 
-
-
-        llm2 = Model(
-            model_name="gpt-4o",            # can be any string, required for LiteLLM
-            api_key="not-needed",           # dummy, local endpoint doesn’t check
-            proxy_url="https://gqibcizt771w61-7000.proxy.runpod.net"
-        )
-        print("Running Thenu")
-        result = llm2.invoke(mtir_object)
-        print(f"Result: {result}")
-        print(f"Type of result: {type(result)}")
-
-        if(is_local):
-            final_result = result
         
-        print(f"Result from model.invoke: {result}")
-        # print(f"Message content from litellm: {message_content}")
-        #print(f"Result: {result}")
-        print("Here We GO!!!!!")
-        evaluate_local_model(model, mtir_object)
         return final_result
 
 

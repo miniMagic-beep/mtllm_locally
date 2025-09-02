@@ -1,7 +1,7 @@
 from mtllm.llm import Model
 from mtllm.mtir import MTIR
 
-#SOMETHINGS I DONT KNOW HOW IT WORKS BUT IT WORKS
+#SOMETHINGS I DONT KNOW HOW IT WORKS BUT IT WORKS!!!
 def _to_part_dict(part) -> dict:
     # Accepts dict / Pydantic / string / other
     if hasattr(part, "model_dump"):  # Pydantic v2
@@ -64,7 +64,9 @@ def evaluate_local_model(model: Model, local_mtir: MTIR) -> bool:
     """Ask the big LLM to check whether the answer given by the local LLM is correct."""
     # Ensure messages are plain dicts with OpenAI/Gemini-compatible content parts
     local_messages = normalize_messages(local_mtir.messages)
-
+    # Remove any existing system messages from the local run
+    local_messages = [m for m in local_messages if m.get("role") != "system"]
+    
     # Append evaluator instruction as a SYSTEM message
     local_messages.append({
         "role": "system",
@@ -79,6 +81,7 @@ def evaluate_local_model(model: Model, local_mtir: MTIR) -> bool:
             }
         ]
     })
+
     global_mtir = MTIR(
         messages=local_messages,
         tools=local_mtir.tools,
