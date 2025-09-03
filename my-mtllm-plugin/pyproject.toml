@@ -2,8 +2,8 @@
 name = "my-mtllm-plugin"
 version = "0.1.0"
 description = "My custom MTLLM plugin"
-authors = ["Your Name <your.email@example.com>"]
-packages = [{include = "my_mtllm_plugin"}] # <-- Add this line
+authors = ["Mihiran Wickramarathne <mihiranpiumanga@gmail.com>"]
+packages = [{include = "my_mtllm_plugin"}] 
 
 [tool.poetry.dependencies]
 python = "^3.11"
