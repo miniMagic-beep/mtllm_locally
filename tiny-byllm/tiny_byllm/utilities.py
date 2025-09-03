@@ -1,12 +1,12 @@
-from mtllm.llm import Model
-from mtllm.mtir import MTIR
+from byllm.llm import Model
+from byllm.mtir import MTIR
 
 import logging
 
 
 
 log = logging.getLogger("my_plugin")
-log.setLevel(logging.DEBUG)  
+log.setLevel(logging.ERROR)  
 
 #SOMETHINGS I DONT KNOW HOW IT WORKS BUT IT WORKS!!!
 def _to_part_dict(part) -> dict:

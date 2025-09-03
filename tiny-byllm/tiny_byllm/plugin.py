@@ -2,8 +2,8 @@
 
 from typing import Callable
 from jaclang.runtimelib.machine import hookimpl
-from mtllm.llm import Model
-from mtllm.mtir import MTIR
+from byllm.llm import Model
+from byllm.mtir import MTIR
 
 import litellm
 
@@ -16,7 +16,7 @@ import requests
 
 from litellm.types.utils import Message as LiteLLMMessage
 
-from my_mtllm_plugin.utilities import*
+from tiny_byllm.utilities import*
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:7000")
 
@@ -25,18 +25,11 @@ class MyMtllmMachine:
 
     @staticmethod
     @hookimpl
-    def call_llm(
-        model: Model, caller: Callable, args: dict[str | int, object]
-    ) -> object:
+    def call_llm(model: Model, mtir: MTIR) -> object:
+        mtir_object = mtir
         """Custom LLM call implementation."""
-        log.debug(f"call_llm called with model: {model}, caller: {caller}, args: {args}")
-        
-        # Create the MTIR object using the factory method
-        mtir_object = MTIR.factory(
-        caller=caller,
-        args=args,
-        call_params={} 
-    )
+        log.debug(f"call_llm called with model: {model}, mtir: {mtir_object}")
+
         local_llm = Model(
             model_name="gpt-4o",            # can be any string, required for LiteLLM
             api_key="not-needed",           # dummy, local endpoint doesn’t check
@@ -71,11 +64,7 @@ class MyMtllmMachine:
         elif (mode =="eval"):
             log.info("Modes is Eval")
             #For Local Usage
-            mtir_temp = MTIR.factory(
-                caller=caller,
-                args=args,
-                call_params={}
-            )
+            mtir_temp = mtir_object.copy()
             result = local_llm.invoke(mtir_temp)
             verdict = evaluate_local_model(model, mtir_temp)
             if verdict:
