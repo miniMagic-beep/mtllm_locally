@@ -6,6 +6,8 @@ tiny-server/adapters/
 tiny-server/training/
 tiny-server/data/
 tiny-server/state.json
+tiny-server/local_models
+
 
 # python basics
 __pycache__/
