@@ -68,7 +68,7 @@ def evaluate_local_model(model: Model, local_mtir: MTIR) -> bool:
     local_messages = [m for m in local_messages if m.get("role") != "system"]
     
     # Append evaluator instruction as a SYSTEM message
-    local_messages.append({
+    local_messages = [{
         "role": "system",
         "content": [
             {
@@ -80,7 +80,7 @@ def evaluate_local_model(model: Model, local_mtir: MTIR) -> bool:
                 )
             }
         ]
-    })
+    }] + local_messages
 
     global_mtir = MTIR(
         messages=local_messages,

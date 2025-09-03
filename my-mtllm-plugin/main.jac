@@ -1,27 +1,28 @@
 import from mtllm.llm {Model}
+import random;
 
 glob llm = Model(model_name="gemini/gemini-2.0-flash");
 #glob llm = Model(model_name="gemini/gemini-1.5-pro");
 
 
-
-obj Student {
-    has name: str;
-    # has age: str;
-    # has sex: str;
+obj Car{
+    has make: str;
+    has color: str;
+    has fuel_type: str;
 }
-def create_a_student(promp: str) -> Student by llm();
 
-def print_student(student: Student) {
-    print("Student Name: " + student.name);
-    # print("Student Age: " + student.age);
-    # print("Student Sex: " + student.sex);
-}
+def generate_random_car() -> Car by llm();
+def write_a_small_ad(car: Car) -> str by llm();
+
 
 with entry {
-    text = "I am John";
-    student = create_a_student(text);
-    print_student(student);
-}
-
+    count: int =1;
+    while count <= 101 {
+        random_car = generate_random_car();
+        print(random_car);
+        ad = write_a_small_ad(random_car);
+        print(ad);
+        count += 1;
+    }
+    }
 

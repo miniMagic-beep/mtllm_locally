@@ -1,7 +1,6 @@
 """Custom MTLLM Plugin."""
 
 from typing import Callable
-
 from jaclang.runtimelib.machine import hookimpl
 from mtllm.llm import Model
 from mtllm.mtir import MTIR
@@ -48,13 +47,17 @@ class MyMtllmMachine:
         # print("DONE!!!!!")
 
         which_model_res = requests.get(BASE_URL+"/which")
-        print(f"GET /which response: {which_model_res.text}")
+        #print(f"GET /which response: {which_model_res.text}")
         # Parse the JSON response and check if is_local is True (as a string)
      
         mode = which_model_res.json().get("mode", "global")
-           
+        if mode == "idle":
+            #print("Model is Idle ")
+            final_result = model.invoke(mtir_object)
+            return final_result
+
         if mode == "global":
-            print("Model is Global ")
+            #print("Model is Global ")
             final_result = model.invoke(mtir_object)
             #This collects train data if mode is global
             local_llm.invoke(mtir_object)
@@ -63,7 +66,7 @@ class MyMtllmMachine:
             final_result = local_llm.invoke(mtir_object)
         #Eval Mode
         elif (mode =="eval"):
-            print("Model is in Eval ")
+            #print("Model is in Eval ")
             #For Local Usage
             mtir_temp = MTIR.factory(
                 caller=caller,
@@ -73,11 +76,13 @@ class MyMtllmMachine:
             result = local_llm.invoke(mtir_temp)
             verdict = evaluate_local_model(model, mtir_temp)
             if verdict:
-                print("Local Model Correct")
+                #print("Local Model Correct")
                 final_result = result
+                requests.post(f"{BASE_URL}/eval", json={"verdict": True})
             else:
-                print(f"Local Model Answer: {result}")
+                #print(f"Local Model Answer: {result}")
                 final_result = model.invoke(mtir_object)
+                requests.post(f"{BASE_URL}/eval", json={"verdict": False})
 
 
 
