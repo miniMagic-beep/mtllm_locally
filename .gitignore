@@ -1,8 +1,6 @@
 # venv
 venv/
 
-#.vscode
-.vscode/
 
 # project data/artifacts
 tiny-server/adapters/
