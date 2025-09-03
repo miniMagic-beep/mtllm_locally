@@ -1,12 +1,31 @@
-# 💮 Araliya MTLLM Plugin for tinyllama
+# 💮 Araliya Tiny-byLLM Plugin
 
-A custom [Jaseci](https://jaseci.org/) plugin to extend `tinyllama` with specialized multi-task language learning (MTLLM) capabilities. This project provides both the Jaseci (`jac`) implementation and a compatible, self-contained `tinyllama` server.
+Redirects `byllm` calls to TinyLLaMA.
 
 ---
 
-## Project Structure
+## 🚀 Quick Start
 
-araliya-mtllm/
-├── my-mtllm-plugin/      # The core Jaseci plugin and main jac application
-├── tiny-server/          # OpenAI-compatible tinyllama server and controls
-└── other/                # (Research materials - not required for deployment)
+
+### 🔧Tiny-byLLM(Plugin)
+
+**Installation**
+```bash
+cd tiny-byllm/
+pip install -e .
+```
+
+### 🖥️ Run Tiny Server
+
+**Install dependencies:**
+
+```bash
+pip install fastapi "uvicorn[standard]" accelerate outlines transformers peft datasets
+```
+
+**Run the server:**
+
+```bash
+cd tiny-server/
+uvicorn app:app --host 0.0.0.0 --port 7000
+```
