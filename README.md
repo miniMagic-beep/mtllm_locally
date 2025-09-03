@@ -1,20 +1,12 @@
-# ⚙️ mtllm_locally
+# 💮 Araliya MTLLM Plugin for tinyllama
 
-### Local LLM Plugin for Jaclang
+A custom [Jaseci](https://jaseci.org/) plugin to extend `tinyllama` with specialized multi-task language learning (MTLLM) capabilities. This project provides both the Jaseci (`jac`) implementation and a compatible, self-contained `tinyllama` server.
 
-A custom MTLLM plugin and local server to integrate a specialized and self-improving **TinyLlama** model into Jaclang's `by llm()` workflow.
+---
 
-***
+## Project Structure
 
-## 🟢 Current Status
-
-* **🖥️ Local LLM Server**: A local server is running using **`llama.cpp`**, which serves the base **TinyLlama** model and makes it available via an API endpoint.
-* **🔌 Custom MTLLM Plugin**: A Jaclang plugin uses **`LiteLLM`** to successfully intercept `by llm()` calls and route them to the local server for processing.
-
-***
-
-## 🚀 Next Steps
-
-1.  **🧠 Dynamic Fine-Tuning**: Enhance the plugin to dynamically trigger fine-tuning jobs on the **TinyLlama** model using collected data, creating specialized versions automatically.
-2.  **🔄 Automated Model Integration**: Implement logic for the plugin to seamlessly switch to the newly fine-tuned model versions without manual intervention.
-3.  **🧪 End-to-End Testing**: Conduct thorough testing of the complete workflow, including the dynamic training and model-swapping loop.
+araliya-mtllm/
+├── my-mtllm-plugin/      # The core Jaseci plugin and main jac application
+├── tiny-server/          # OpenAI-compatible tinyllama server and controls
+└── other/                # (Research materials - not required for deployment)

@@ -1,6 +1,13 @@
 from mtllm.llm import Model
 from mtllm.mtir import MTIR
 
+import logging
+
+
+
+log = logging.getLogger("my_plugin")
+log.setLevel(logging.DEBUG)  
+
 #SOMETHINGS I DONT KNOW HOW IT WORKS BUT IT WORKS!!!
 def _to_part_dict(part) -> dict:
     # Accepts dict / Pydantic / string / other
@@ -91,5 +98,5 @@ def evaluate_local_model(model: Model, local_mtir: MTIR) -> bool:
     )
 
     verdict = model.invoke(global_mtir)
-    print(f"Evaluation verdict: {verdict}")
+    log.debug(f"Evaluator verdict: {verdict}")
     return verdict

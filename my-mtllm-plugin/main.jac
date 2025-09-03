@@ -1,5 +1,4 @@
 import from mtllm.llm {Model}
-import random;
 
 glob llm = Model(model_name="gemini/gemini-2.0-flash");
 #glob llm = Model(model_name="gemini/gemini-1.5-pro");
