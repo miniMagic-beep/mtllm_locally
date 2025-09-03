@@ -17,7 +17,7 @@ from litellm.types.utils import Message as LiteLLMMessage
 
 from my_mtllm_plugin.utilities import evaluate_local_model
 
-BASE_URL = "https://gqibcizt771w61-7000.proxy.runpod.net"
+BASE_URL = "https://7184thexftirp2-7000.proxy.runpod.net"
 
 
 class MyMtllmMachine:
