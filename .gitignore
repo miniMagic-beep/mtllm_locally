@@ -1,1 +1,14 @@
+# venv
 my-mtllm-plugin/venv/
+
+# project data/artifacts
+tiny-server/adapters/
+tiny-server/training/
+tiny-server/data/
+tiny-server/state.json
+
+# python basics
+__pycache__/
+*.py[cod]
+
+
