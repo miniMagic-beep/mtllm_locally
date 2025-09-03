@@ -1,103 +1,88 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from typing import Optional, Any, Dict, List, Union
-from transformers import AutoModelForCausalLM, AutoTokenizer
-import torch, json
-import outlines
-from outlines.types import JsonSchema
+"""Custom MTLLM Plugin."""
 
-# ---------------------
-# Load model once
-# ---------------------
-MODEL_NAME = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, use_fast=True)
-hf_model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
-    device_map="auto",
-    torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
-)
-# Outlines-wrapped for constrained decoding
-ol_model = outlines.from_transformers(hf_model, tokenizer)
+from typing import Callable
 
-# ---------------------
-# FastAPI setup
-# ---------------------
-app = FastAPI(title="TinyLlama (system+user, JSON-schema optional)")
+from jaclang.runtimelib.machine import hookimpl
+from mtllm.llm import Model
+from mtllm.mtir import MTIR
 
-# ---- Schemas ----
-class RichContent(BaseModel):
-    type: str
-    text: Optional[str] = None  # only 'text' supported for now
+import litellm
 
-class Message(BaseModel):
-    role: str                                  # "system" or "user"
-    content: Union[str, List[RichContent]]     # supports Gemini-style list
+# This single line is all you need to enable verbose logging
+#litellm.set_verbose = True
+#litellm.turn_on_debug_logs()
+import os
+import requests
 
-class ResponseFormat(BaseModel):
-    type: str                                  # must be "json_schema"
-    schema: Dict[str, Any]                     # plain JSON Schema object (required)
+from litellm.types.utils import Message as LiteLLMMessage
 
-class ChatRequest(BaseModel):
-    messages: List[Message]
-    json_schema: Dict[str, Any]                # <-- renamed to avoid collision
-    temperature: Optional[float] = 0.0
-    max_tokens: Optional[int] = 128
+from my_mtllm_plugin.utilities import evaluate_local_model
 
-class ChatResponse(BaseModel):
-    prompt: str
-    response: Any  # dict if JSON-constrained, str otherwise
-
-# ---- Utilities ----
-def flatten_content(content: Union[str, List[RichContent]]) -> str:
-    if isinstance(content, str):
-        return content
-    parts = []
-    for c in content:
-        # accept both dicts or parsed objects
-        if isinstance(c, dict):
-            if c.get("type") == "text" and c.get("text"):
-                parts.append(c["text"])
-        else:
-            if c.type == "text" and c.text:
-                parts.append(c.text)
-    return "\n".join(parts)
-
-def build_prompt(messages: List[Message]) -> str:
-    prompt = ""
-    for m in messages:
-        text = flatten_content(m.content)
-        if m.role == "system":
-            prompt += f"[SYSTEM]: {text}\n"
-        elif m.role == "user":
-            prompt += f"[USER]: {text}\n"
-    prompt += "[ASSISTANT]: "
-    return prompt
-
-# ---------------------
-# Endpoints
-# ---------------------
-@app.get("/healthz")
-def health():
-    return {"status": "ok"}
+BASE_URL = "https://gqibcizt771w61-7000.proxy.runpod.net"
 
 
-@app.post("/chat", response_model=ChatResponse)
-def chat(req: ChatRequest):
-    try:
-        prompt = build_prompt(req.messages)
+class MyMtllmMachine:
+    """Custom MTLLM Plugin Implementation."""
 
-        # Wrap client schema for Outlines
-        schema = JsonSchema(req.json_schema)
-
-        # Direct Outlines call with schema as output_type
-        result = ol_model(
-            prompt,
-            output_type=schema,
-            max_new_tokens=req.max_tokens,
-            temperature=req.temperature
+    @staticmethod
+    @hookimpl
+    def call_llm(
+        model: Model, caller: Callable, args: dict[str | int, object]
+    ) -> object:
+        """Custom LLM call implementation."""
+    
+        # Create the MTIR object using the factory method
+        mtir_object = MTIR.factory(
+        caller=caller,
+        args=args,
+        call_params={} 
+    )
+        local_llm = Model(
+            model_name="gpt-4o",            # can be any string, required for LiteLLM
+            api_key="not-needed",           # dummy, local endpoint doesn’t check
+            proxy_url=BASE_URL
         )
-        print(result)
-        return ChatResponse(prompt=prompt, response=result, raw=json.dumps(result))
+        # Get the return JSON from the MTIR object and print it
+        #
+        # print(f"MTIR return JSON: {mtir_json}")
+        # print("DONE!!!!!")
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        which_model_res = requests.get(BASE_URL+"/which")
+        print(f"GET /which response: {which_model_res.text}")
+        # Parse the JSON response and check if is_local is True (as a string)
+     
+        mode = which_model_res.json().get("mode", "global")
+           
+        if mode == "global":
+            print("Model is Global ")
+            final_result = model.invoke(mtir_object)
+            #This collects train data if mode is global
+            local_llm.invoke(mtir_object)
+
+        if mode == "local":
+            final_result = local_llm.invoke(mtir_object)
+        #Eval Mode
+        elif (mode =="eval"):
+            print("Model is in Eval ")
+            #For Local Usage
+            mtir_temp = MTIR.factory(
+                caller=caller,
+                args=args,
+                call_params={}
+            )
+            result = local_llm.invoke(mtir_temp)
+            verdict = evaluate_local_model(model, mtir_temp)
+            if verdict:
+                print("Local Model Correct")
+                final_result = result
+            else:
+                print(f"Local Model Answer: {result}")
+                final_result = model.invoke(mtir_object)
+
+
+
+
+        
+        return final_result
+
+
