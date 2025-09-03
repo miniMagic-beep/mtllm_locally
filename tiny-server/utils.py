@@ -57,11 +57,14 @@ TRAIN_FILE = os.path.join(DATA_DIR)
 
 
 def count_lines(path: str) -> int:
-    if not os.path.exists(path):
-        # Create the file if it doesn't exist
-        open(path, "a", encoding="utf-8").close()
-        return 0
-    with open(path, "r", encoding="utf-8") as f:
+    # Ensure parent directories exist
+    parent = os.path.dirname(path)
+    if parent:
+        os.makedirs(parent, exist_ok=True)
+
+    # Create file if missing, then count lines
+    with open(path, "a+", encoding="utf-8") as f:
+        f.seek(0)
         return sum(1 for _ in f)
 
 def number_of_train_data() -> int:
