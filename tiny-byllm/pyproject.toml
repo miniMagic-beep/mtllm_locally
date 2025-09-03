@@ -11,7 +11,7 @@ mtllm = "*"
 jaclang = "*"
 
 [tool.poetry.plugins."jac"]
-tiny-byllm = "tiny_byllm.plugin:MyMtllmMachine"
+tiny-byllm = "tiny_byllm.plugin:TinyMain"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -22,7 +22,7 @@ from tiny_byllm.utilities import*
 
 BASE_URL = os.getenv("BASE_URL", "http://localhost:7000")
 
-class MyMtllmMachine:
+class TinyMain:
     """Custom MTLLM Plugin Implementation."""
 
     @staticmethod
