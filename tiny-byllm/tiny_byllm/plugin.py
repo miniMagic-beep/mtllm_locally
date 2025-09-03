@@ -4,6 +4,8 @@ from typing import Callable
 from jaclang.runtimelib.machine import hookimpl
 from byllm.llm import Model
 from byllm.mtir import MTIR
+import copy
+
 
 import litellm
 
@@ -63,8 +65,8 @@ class MyMtllmMachine:
         #Eval Mode
         elif (mode =="eval"):
             log.info("Modes is Eval")
-            #For Local Usage
-            mtir_temp = mtir_object.copy()
+            #For Local Usage - We need copy because the local answer could be wrong
+            mtir_temp = copy.deepcopy(mtir_object)
             result = local_llm.invoke(mtir_temp)
             verdict = evaluate_local_model(model, mtir_temp)
             if verdict:
