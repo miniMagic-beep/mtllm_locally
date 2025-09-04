@@ -3,9 +3,6 @@
 Minimal steps to install dependencies and run the server.
 
 
-
-
-
 ## Install dependencies
 
     pip install fastapi "uvicorn[standard]" accelerate outlines transformers peft datasets
@@ -25,8 +22,6 @@ json
 { "status": "ok" }
 
 
----
-
 ### 2. Current Mode
 *GET* /which  
 Check the current operating mode.
@@ -35,8 +30,6 @@ Check the current operating mode.
 json
 { "mode": "global" }
 
-
----
 
 ### 3. Set Mode
 *POST* /mode  
@@ -51,8 +44,6 @@ json
 json
 { "mode": "local" }
 
-
----
 
 ### 4. Evaluation Counter
 *POST* /eval  
@@ -70,8 +61,6 @@ json
 json
 { "eval_count": 3 }
 
-
----
 
 ### 5. Chat Completions (OpenAI-Compatible)
 *POST* /chat/completions  
@@ -101,5 +90,3 @@ json
   ]
 }
 
-
----
