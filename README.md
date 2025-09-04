@@ -74,4 +74,16 @@ The local TinyLLaMA server exchanges:
   <img src="imgs/pic2.jpeg" alt="Modes" width="600"/>
 </p>
 
+🌐 **Cloud Mode** – The system operates fully on the cloud LLM, both to answer queries and to collect training data for the local model.
+
+💤 **Idle Mode** – Training of the local TinyLLaMA runs as a subprocess, while the cloud LLM continues handling responses.
+
+🧪 **Eval Mode** – The local model’s answers are generated and then sent to the cloud LLM for evaluation.
+
+❌ If the local model’s answers fail, the system returns to **Cloud Mode** to gather more data and continue training.
+
+✅ If the local model passes multiple evaluations in a row, the system advances to **Local Mode**.
+
+💻 **Local Mode** – The local TinyLLaMA serves answers directly. To ensure ongoing quality, it periodically performs random evaluation checks. If a random eval fails, the system reverts to training mode and resumes the cycle to further improve the local model.
+
 
