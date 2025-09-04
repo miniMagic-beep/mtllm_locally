@@ -70,6 +70,8 @@ The local TinyLLaMA server exchanges:
 
 - The tiny-server itself is an OpenAI API–compatible server that supports constrained decoding through outlines, enabling structured output generation. This architecture allows seamless switching between local and cloud backends while ensuring flexible, reliable integration with Jac.
 
+# 🔄 Adaptive Mode Cycle
+
 <p align="center">
   <img src="imgs/pic2.jpeg" alt="Modes" width="600"/>
 </p>
