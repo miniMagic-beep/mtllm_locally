@@ -107,7 +107,7 @@ def set_mode(req: ModeRequest):
     global mode
     mode = req.new_mode
     #Save the state
-    state.change_mode(mode)
+    state.set_mode(mode)
     return {"mode": mode}
 
 @app.post("/eval")
@@ -115,7 +115,7 @@ def set_mode(req: EvalRequest):
     if req.verdict:   # only increment if true
         state.increment_eval()
         if state.eval_count>10:
-            state.change_mode("local")
+            state.set_mode("local")
     else:
         state.eval_count = 0
         state.mode = "global"
@@ -165,7 +165,7 @@ def chat(req: ChatCompletionsRequest):
         #EVAL INTELIGENT-Randomly change mode to eval to check if local working fine
         if random.randint(1, 100) == 1:
             state.eval_count = 9
-            state.change_mode("eval")
+            state.set_mode("eval")
 
 
         return ChatCompletionsResponse(
