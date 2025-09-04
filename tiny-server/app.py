@@ -6,6 +6,7 @@ import torch, json
 import outlines
 from outlines.types import JsonSchema
 import pprint
+import random
 
 from utils import *
 
@@ -161,6 +162,12 @@ def chat(req: ChatCompletionsRequest):
             # plain text generation
             result = infer_text(prompt,req)
             content = str(result)
+
+        #EVAL INTELIGENT-Randomly change mode to eval to check if local working fine
+        if random.randint(1, 100) == 1:
+            state.eval_count = 9
+            state.change_mode("eval")
+
 
         return ChatCompletionsResponse(
             choices=[Choice(index=0, message=ChoiceMessage(content=content))]
