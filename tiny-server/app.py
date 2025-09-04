@@ -133,7 +133,7 @@ def chat(req: ChatCompletionsRequest):
         training_data_count += 1
         if training_data_count > 100:
             train()
-            state.change_mode("idle")
+            state.set_mode("idle")
         return ChatCompletionsResponse(
     choices=[Choice(index=0, message=ChoiceMessage(content=req.messages[-1].content))]
 )
