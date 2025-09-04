@@ -6,7 +6,7 @@ import logging
 
 
 log = logging.getLogger("my_plugin")
-log.setLevel(logging.ERROR)  
+log.setLevel(logging.DEBUG)  
 
 #SOMETHINGS I DONT KNOW HOW IT WORKS BUT IT WORKS!!!
 def _to_part_dict(part) -> dict:
@@ -83,7 +83,7 @@ def evaluate_local_model(model: Model, local_mtir: MTIR) -> bool:
                 "text": (
                     "You are an evaluator. Look at the original instruction and the assistant's answer. "
                     "Decide if the assistant's answer correctly follows the instruction. "
-                    "Return only a JSON boolean: true if correct, false otherwise. No explanation."
+                    "Return only a JSON boolean: true if correct, false otherwise. No explanation.Do NOT be very strict.If it matches the output say True"
                 )
             }
         ]
