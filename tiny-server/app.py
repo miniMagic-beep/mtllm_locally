@@ -28,7 +28,7 @@ state = State()
 number_of_train_data()
 #Gets the Number of Records Present
 
-training_data_count = state.train_count
+
 
 
     
@@ -127,11 +127,10 @@ def set_mode(req: EvalRequest):
 @app.post("/chat/completions", response_model=ChatCompletionsResponse)
 def chat(req: ChatCompletionsRequest):
     global state
-    global training_data_count
     if state.mode == "global":
         save_the_data([Message(**m.model_dump()) for m in req.messages])
-        training_data_count += 1
-        if training_data_count > 100:
+        state.increment_train()
+        if state.train_count > 100:
             train()
             state.set_mode("idle")
         return ChatCompletionsResponse(

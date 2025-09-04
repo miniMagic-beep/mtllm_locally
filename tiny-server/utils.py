@@ -186,6 +186,10 @@ class State:
     def increment_eval(self, n: int = 1) -> dict:
         self.eval_count += n
         return self.save()
+    
+    def increment_train(self, n: int = 1) -> dict:
+        self.train_count += n
+        return self.save()
 
     def reset_train(self) -> dict:
         """Reset training count to 0."""
