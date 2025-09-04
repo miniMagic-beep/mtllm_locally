@@ -22,11 +22,13 @@ from model import infer_json,infer_text,train
 # ---------------------
 app = FastAPI(title="TinyLlama (OpenAI-compatible shim)")
 
-
-#Gets the Number of Records Present
-training_data_count = number_of_train_data()
-# ---- Existing helpers (unchanged) ----
 state = State()
+#This fucntion creates the train.json also outputs number of lines there if it exsits
+number_of_train_data()
+#Gets the Number of Records Present
+
+training_data_count = state.train_count
+
 
     
 
@@ -115,8 +117,8 @@ def set_mode(req: EvalRequest):
             state.change_mode("local")
     else:
         state.eval_count = 0
-        state.mode = "idle"
-        state.save()
+        state.mode = "global"
+        state.reset_train()
     
     return {"eval_count": state.eval_count}
 

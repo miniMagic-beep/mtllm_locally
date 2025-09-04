@@ -164,15 +164,17 @@ class State:
                 data = json.load(f)
             self.mode = data.get("mode", "global")
             self.eval_count = data.get("eval_count", 0)
+            self.train_count = data.get("train_count", 0)
         else:
             # defaults
             self.mode = "global"
             self.eval_count = 0
+            self.train_count = 0
             self.save()
 
     def save(self) -> dict:
         """Save current state and return it as dict."""
-        data = {"mode": self.mode, "eval_count": self.eval_count}
+        data = {"mode": self.mode, "eval_count": self.eval_count, "train_count": self.train_count}
         with open(self.path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
         return data
@@ -184,7 +186,8 @@ class State:
     def increment_eval(self, n: int = 1) -> dict:
         self.eval_count += n
         return self.save()
-    
-    def change_mode(self,mode):
-        self.mode = mode
+
+    def reset_train(self) -> dict:
+        """Reset training count to 0."""
+        self.train_count = 0
         return self.save()
