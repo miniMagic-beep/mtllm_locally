@@ -51,3 +51,17 @@ uvicorn app:app --host 0.0.0.0 --port 7000
 ✅ Updated to work with byllm
 
 🗂 Use the mtllm-compatible branch for mtllm (deprecated)
+
+---
+
+## 🏗️ Architecture
+
+<p align="center">
+  <img src="imgs/pic1.jpg" alt="Architecture Overview" width="600"/>
+</p>
+
+<p align="center">
+  <img src="imgs/pic2.jpg" alt="Architecture Overview" width="600"/>
+</p>
+
+
