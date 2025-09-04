@@ -60,15 +60,25 @@ uvicorn app:app --host 0.0.0.0 --port 7000
   <img src="imgs/pic1.jpeg" alt="System Overview" width="600"/>
 </p>
 
-The plugin intercepts byllm calls and, depending on the mode set by the tiny-server, routes inference either to a local TinyLLaMA server (running on port 7000) or to a cloud LLM.
+The plugin intercepts **byllm** calls and, depending on the mode set by the **tiny-server**, routes inference either to:
 
-The local TinyLLaMA server exchanges:
+- 🖥️ A local **TinyLLaMA server** (running on port 7000)  
+- ☁️ A **cloud LLM**
 
-- Training Data / Inference results with the plugin.
+---
 
-- Control signals to manage fine-tuning, evaluation, and adapter usage (the available control endpoints are documented in the tiny-server README).
+### 🔄 Local TinyLLaMA Server Exchanges
+- 📂 **Exchange Training Data / Inference results** with the plugin  
+- ⚙️ **Control signals** to manage fine-tuning, evaluation or mode switch
+  *(the available control endpoints are documented in the tiny-server README)*
 
-- The tiny-server itself is an OpenAI API–compatible server that supports constrained decoding through outlines, enabling structured output generation. This architecture allows seamless switching between local and cloud backends while ensuring flexible, reliable integration with Jac.
+---
+
+### 🌐 tiny-server
+- An **OpenAI API–compatible server**  
+- Supports **constrained decoding** through *outlines*, enabling structured output generation  
+- Allows seamless switching between **local** and **cloud backends**  
+- Ensures flexible, reliable integration with **Jac**
 
 ## 🔄 Adaptive Mode Cycle
 
