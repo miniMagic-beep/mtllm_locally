@@ -50,7 +50,8 @@ def load_model(model_name: str):
         model = AutoModelForCausalLM.from_pretrained(
             LOCAL_DIR,
             device_map="auto",
-            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+            #torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32
+            torch_dtype=torch.float32
         )
 
 
@@ -142,13 +143,14 @@ def train():
     training_args = TrainingArguments(
         output_dir="./training",
         remove_unused_columns=False,
-        per_device_train_batch_size=10,
+        per_device_train_batch_size=5,
         gradient_checkpointing=True,
-        gradient_accumulation_steps=4,
-        max_steps=100,
+        gradient_accumulation_steps=5,
+        #max_steps=100,
+        num_train_epochs=30,
         learning_rate=2.5e-5,
         logging_steps=5,
-        fp16=True,
+        #fp16=True,
         optim="adamw_torch",
         save_strategy="steps",
         save_steps=50,

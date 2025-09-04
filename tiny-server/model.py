@@ -69,13 +69,14 @@ def load_adapters():
 
 #This will do the inference
 def infer_json(prompt,schema,req):
-    print(prompt)
+    #print(prompt)
     result = ol_model(
                 prompt,
                 output_type=schema,
                 max_new_tokens=req.max_tokens,
                 temperature=req.temperature
             )
+    print(result)
     return result
 
 def infer_text(prompt,req):
