@@ -54,7 +54,7 @@ uvicorn app:app --host 0.0.0.0 --port 7000
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
 <p align="center">
   <img src="imgs/pic1.jpeg" alt="System Overview" width="600"/>
@@ -70,7 +70,7 @@ The local TinyLLaMA server exchanges:
 
 - The tiny-server itself is an OpenAI API–compatible server that supports constrained decoding through outlines, enabling structured output generation. This architecture allows seamless switching between local and cloud backends while ensuring flexible, reliable integration with Jac.
 
-# 🔄 Adaptive Mode Cycle
+## 🔄 Adaptive Mode Cycle
 
 <p align="center">
   <img src="imgs/pic2.jpeg" alt="Modes" width="600"/>
