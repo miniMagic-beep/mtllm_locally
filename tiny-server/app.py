@@ -14,11 +14,6 @@ from model import infer_json,infer_text,train
 
 
 # ---------------------
-# Load model once (unchanged)
-# ---------------------
-
-
-# ---------------------
 # FastAPI setup
 # ---------------------
 app = FastAPI(title="TinyLlama (OpenAI-compatible shim)")
@@ -27,62 +22,6 @@ state = State()
 #This fucntion creates the train.json also outputs number of lines there if it exsits
 number_of_train_data()
 #Gets the Number of Records Present
-
-
-
-
-    
-
-
-
-
-
-
-
-# def append_example(system: str, user: str, response: str):
-#     """Append system/user/response triple to JSONL file with tags."""
-#     rec = {
-#         "system": f"[SYSTEM]: {system}" if system else "",
-#         "user": f"[USER]: {user}" if user else "",
-#         "response": f"[ASSISTANT]: {response}" if response else ""
-#     }
-#     with open(TRAIN_FILE, "a", encoding="utf-8") as f:
-#         f.write(json.dumps(rec, ensure_ascii=False) + "\n")
-
-
-
-# def save_the_data(messages: List[Union[dict, object]]):
-#     """
-#     Extract last system, last user, and last assistant.
-#     Save as {system, user, response} with [SYSTEM], [USER], [ASSISTANT] tags included.
-#     """
-#     if not messages:
-#         return
-#     last = messages[-1]
-#     role = last.get("role") if isinstance(last, dict) else getattr(last, "role", None)
-#     if role != "assistant":
-#         return
-
-#     # Helper to extract content
-#     def content_of(m):
-#         return m.get("content") if isinstance(m, dict) else getattr(m, "content", "")
-
-#     # Last system
-#     system_msg = next(
-#         (content_of(m) for m in reversed(messages)
-#          if (m.get("role") if isinstance(m, dict) else getattr(m,"role",None)) == "system"),
-#         ""
-#     )
-#     # Last user
-#     user_msg = next(
-#         (content_of(m) for m in reversed(messages)
-#          if (m.get("role") if isinstance(m, dict) else getattr(m,"role",None)) == "user"),
-#         ""
-#     )
-#     # Last assistant (the response we want)
-#     response_msg = content_of(last)
-#     append_example(system_msg, user_msg, response_msg)
-
 
 
 

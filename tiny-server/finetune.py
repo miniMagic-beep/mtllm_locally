@@ -14,7 +14,7 @@ from peft import get_peft_model, LoraConfig, TaskType, prepare_model_for_kbit_tr
 import os
 
 def load_model(model_name: str):
-    """Load TinyLlama model with 8-bit quantization and LoRA PEFT setup."""
+    # """Load TinyLlama model with 8-bit quantization and LoRA PEFT setup."""
     # Tokenizer
     # tokenizer = AutoTokenizer.from_pretrained(
     #     model_name,

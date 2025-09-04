@@ -39,15 +39,6 @@ else:
     hf_model.save_pretrained(LOCAL_DIR)
     print(f"Model saved to {LOCAL_DIR}")
 
-# tokenizer = AutoTokenizer.from_pretrained("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T", padding_side="right",)
-# tokenizer.pad_token = tokenizer.eos_token
-# bnb_config = BitsAndBytesConfig(
-#    load_in_8bit=True,
-# #    bnb_4bit_quant_type="nf4",
-# #    bnb_4bit_use_double_quant=True,
-#    bnb_8bit_compute_dtype=torch.bfloat16
-# )
-# hf_model = AutoModelForCausalLM.from_pretrained("TinyLlama/TinyLlama-1.1B-intermediate-step-1431k-3T", device_map="auto", quantization_config=bnb_config)
 
 
 def load_adapters():
