@@ -1,6 +1,9 @@
 # 💮 Araliya Tiny-byLLM Plugin
 
 Seamlessly integrates byllm calls with TinyLlama through a local tiny-server, supporting fine-tuning and evaluation workflows.
+[![Araliya Demo Video](http://img.youtube.com/vi/5T9eMUqUlZs/0.jpg)](http://www.youtube.com/watch?v=5T9eMUqUlZs "Watch the Demo")
+
+> **🎥 Watch the demo:** [Araliya - mtllm plugin for tinyllama](http://www.youtube.com/watch?v=5T9eMUqUlZs)
 
 ---
 
